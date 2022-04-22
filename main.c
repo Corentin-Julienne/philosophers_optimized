@@ -6,42 +6,47 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:50 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/21 18:04:35 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:23:47 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	philo_died(t_sim *sim, long long i)
+static void	philo_died(t_sim *sim, int i)
 {
-	display_msg(phis[i].id, DEAD, &phis[i]);
-	pthread_mutex_lock(&phis->mutexes->stop_game);
-	phis->sim->endgame++;
-	pthread_mutex_unlock(&phis->mutexes->stop_game);
+	sim->endgame++;
+	display_msg(sim->philos[i].id, DEAD, sim);
+}
+
+static void	philos_have_eaten_enough(t_sim *sim)
+{
+	sim->endgame++;
+	display_msg(1, VICTORY, sim);
 }
 
 static void	wait_for_endgame(t_sim *sim)
 {
-	long long		i;
+	int			i;
 
 	while (!sim->endgame)
 	{
 		i = 0;
 		while (i < sim->nb_philo)
 		{
-			if ((get_time_now() >= (sim->philos[i].last_eat + sim->tt_die))
-				 && phis[i].last_eat != -1)
+			if (get_time_now() >= sim->philos[i].last_eat + sim->tt_die
+				 && sim->philos[i].last_eat != -1)
 			{
-				phi_has_died(phis, i);
-				break ;
-			}
-			else if (sim->time_eaten == sim->nb_philo)
-			{
-				phis_have_eaten(phis, i);
-				break ;
+				philo_died(sim, i);
+				return ;
 			}
 			i++;
 		}
+		if (sim->time_eaten == sim->nb_philo)
+		{
+			philos_have_eaten_enough(sim);
+			return ;
+		}
+		usleep(1000);
 	}
 }
 
@@ -54,7 +59,7 @@ static void	wait_for_endgame(t_sim *sim)
 
 static int	init_philos_threads(t_sim *sim)
 {
-	long long			i;
+	int			i;
 
 	i = 0;
 	while (i < sim->nb_philo)
@@ -63,7 +68,6 @@ static int	init_philos_threads(t_sim *sim)
 			 &philo_routine, (void *)&sim->philos[i]);
 		i++;
 	}
-	sim->go_signal = 1;
 	sim->start_sim = get_time_now();
 	wait_for_endgame(sim);
 	i = 0;
@@ -89,6 +93,5 @@ int	main(int argc, char **argv)
 	if (!sim)
 		return (display_error_msg("unsuccessful memory allocation\n"));
 	init_sim_struct(sim, argv, argc);
-	init_philos_threads(sim);
-	return (0);
+	return (init_philos_threads(sim));
 }

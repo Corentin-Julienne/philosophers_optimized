@@ -6,14 +6,24 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 17:00:25 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/21 17:58:47 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/04/22 16:57:40 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/* in case of the sim stopping, release forks to avoid deadlocks
+and allows phis routine to stop */
+
+static int	release_fork_case_endsim(t_philo *philo)
+{
+	pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
+	pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
+	return (1);
+}
+
 /* die_alone is used when there is only one philosopher
-there is also one fork so philo cannot eat, 
+there is also one fork so philo cannot eat,
 so he is starving to death. Sad. */
 
 static int	die_alone(t_philo *philo)
@@ -38,11 +48,6 @@ static int	request_forks(t_philo *philo)
 	{
 		pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
 		display_msg(philo->id, FORK, philo->sim);
-	}
-	else
-		return (1);
-	if (!philo->sim->endgame)
-	{
 		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
 		display_msg(philo->id, FORK, philo->sim);
 	}
@@ -57,11 +62,17 @@ static int	eating_process(t_philo *philo)
 	if (request_forks(philo) != 0)
 		return (1);
 	philo->last_eat = get_time_now();
-	if (custom_usleep(philo->sim->tt_eat, philo->sim) != 0)
-		return (1);
+	if (custom_usleep(philo->sim->tt_eat, philo->sim) == 1)
+		return (release_fork_case_endsim(philo));
 	philo->meal_num++;
 	pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
 	pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
+	if (philo->meal_num == philo->sim->win_cond)
+	{
+		pthread_mutex_lock(&philo->sim->add_meal_count);
+		philo->sim->time_eaten++;
+		pthread_mutex_unlock(&philo->sim->add_meal_count);
+	}
 	return (0);
 }
 
@@ -81,7 +92,7 @@ int	eat_sleep_think_pattern(t_philo *philo)
 	if (eating_process(philo) == 1)
 		return (1);
 	display_msg(philo->id, SLEEPING, philo->sim);
-	if (custom_usleep(philo->sim->tt_sleep, philo->sim) != 0)
+	if (custom_usleep(philo->sim->tt_sleep, philo->sim) == 1)
 		return (1);
 	display_msg(philo->id, THINKING, philo->sim);
 	return (0);

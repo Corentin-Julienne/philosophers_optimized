@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 13:07:50 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/21 17:25:56 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/04/22 15:50:51 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	check_args_validity(int argc, char **argv)
 		return (0);
 	if (argc == 6)
 	{
-		if (is_int_convertible(argv[5]) == 1)
+		if (is_int_convertible(argv[5]) == 0)
 			return (0);
 	}
 	return (1);

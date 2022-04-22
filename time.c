@@ -6,11 +6,33 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:43 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/21 17:52:26 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/04/22 18:13:22 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+/* this function is used in order to prevent all philosophers
+to take the right forks in the same time and
+then causing a deadlock */
+
+void	anti_deadlock_algo(t_philo *philo)
+{
+	if (philo->sim->nb_philo % 2 == 0)
+	{
+		if ((philo->id - 1) % 2 != 0)
+			custom_usleep(philo->sim->tt_eat, philo->sim);
+	}
+	else
+	{
+		if (philo->sim->nb_philo == 1)
+			return ;
+		if ((philo->id - 1) % 2 != 0)
+			custom_usleep(philo->sim->tt_eat, philo->sim);
+		if (philo->id - 1 == philo->sim->nb_philo)
+			custom_usleep(philo->sim->tt_eat * 2, philo->sim);
+	}
+}
 
 int	is_dead(long long last_eat, long long tt_die)
 {
@@ -42,7 +64,7 @@ int	custom_usleep(long long time, t_sim *sim)
 	long long		start;
 
 	start = get_time_now();
-	while (!sim->endgame && !sim->win_cond)
+	while (!sim->endgame)
 	{
 		if (get_time_now() - start >= time)
 			return (0);

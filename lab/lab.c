@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routines.c                                         :+:      :+:    :+:   */
+/*   lab.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/21 16:23:32 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/22 16:21:24 by cjulienn         ###   ########.fr       */
+/*   Created: 2022/04/22 13:53:46 by cjulienn          #+#    #+#             */
+/*   Updated: 2022/04/22 13:57:02 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+# include <unistd.h>
+# include <stdio.h>
 
-void	*philo_routine(void *arg)
+int	main(void)
 {
-	t_philo			*philo;
-	int				res_func;
-
-	philo = (t_philo *)arg;
-	philo->last_eat = get_time_now();
-	res_func = 0;
-	anti_deadlock_algo(philo);
-	while (philo->sim->start_sim == -1)
-		usleep(1);
-	while (!res_func)
-		res_func = eat_sleep_think_pattern(philo);
-	return (NULL);
+	printf("result of %i modulo 2 = %i\n", 0, 0 % 2);
+	printf("result of %i modulo 2 = %i\n", 1, 1 % 2);
+	printf("result of %i modulo 2 = %i\n", 2, 2 % 2);
+	printf("result of %i modulo 2 = %i\n", 3, 3 % 2);
+	printf("result of %i modulo 2 = %i\n", 4, 4 % 2);
+	return 0;
 }

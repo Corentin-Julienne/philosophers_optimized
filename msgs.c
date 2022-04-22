@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:48:46 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/21 18:03:27 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/04/22 13:11:42 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	print_msg(int id, int msg_type, t_sim *sim)
 	else
 		msg = "has taken a fork\n";
 	time = get_time_now() - sim->start_sim;
-	printf("%li %i %s", time, id, msg);
+	printf("%lli %i %s", time, id, msg);
 }
 
 /* display msg function will print a msg for a changing state
@@ -54,8 +54,13 @@ int	display_msg(int id, int msg_type, t_sim *sim)
 	pthread_mutex_lock(&sim->write_msg);
 	if (stop == 0)
 	{
-		if (msg_type == DEAD)
+		if (msg_type == DEAD || msg_type == VICTORY)
 			stop++;
+		if (msg_type == VICTORY)
+		{
+			pthread_mutex_unlock(&sim->write_msg);
+			return (stop);
+		}
 		print_msg(id, msg_type, sim);
 	}
 	pthread_mutex_unlock(&sim->write_msg);

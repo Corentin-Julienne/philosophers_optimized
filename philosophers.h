@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 12:49:12 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/21 18:05:38 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/04/22 17:44:55 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define SLEEPING		2
 # define DEAD			3
 # define FORK			4
+# define VICTORY		5
 
 typedef struct s_sim
 {
@@ -36,13 +37,10 @@ typedef struct s_sim
 	int					time_eaten;
 	int					endgame;
 	long long			start_sim;
-	int					go_signal;
-	t_philo				*philos;
+	struct s_philo		*philos;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		write_msg;
 	pthread_mutex_t		add_meal_count;
-	pthread_mutex_t		stop_game;
-	pthread_t			death_checker;
 }						t_sim;
 
 typedef struct s_philo
@@ -52,7 +50,6 @@ typedef struct s_philo
 	long long			last_eat;
 	int					right_fork_id;
 	int					left_fork_id;
-	int					alive;
 	pthread_t			thread_id;
 	t_sim				*sim;
 }						t_philo;
@@ -61,6 +58,8 @@ typedef struct s_philo
 int					eat_sleep_think_pattern(t_philo *philo);
 /* check_args.c */
 int					check_args_validity(int argc, char **argv);
+/* free.c */
+int					clean_program(t_sim *sim);
 /* init_structs.c */
 void				init_sim_struct(t_sim *sim, char **argv, int argc);
 /* msgs.c */
@@ -69,10 +68,12 @@ int					display_msg(int id, int msg_type, t_sim *sim);
 /* routines */
 void				*philo_routine(void *arg);
 /* time.c */
+void				anti_deadlock_algo(t_philo *philo);
 int					is_dead(long long last_eat, long long tt_die);
 int					custom_usleep(long long time, t_sim *sim);
 long long			get_time_now(void);
-/* utils_1.c */
+void				custom_micro_usleep(long long time);
+/* utils.c */
 size_t				ft_strlen(const char *s);
 long long			calc_res(const char *str);
 

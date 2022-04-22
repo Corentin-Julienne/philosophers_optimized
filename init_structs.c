@@ -6,11 +6,11 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 15:11:44 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/21 17:22:13 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/04/22 17:21:02 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philosophers.h"
+#include "philosophers.h"
 
 /* init all the non-forks mutexes useful for the simulation */
 
@@ -70,7 +70,7 @@ static t_philo	*init_philosophers(t_sim *sim)
 	i = 0;
 	while (i < sim->nb_philo)
 	{
-		philos[i].id = i;
+		philos[i].id = i + 1;
 		philos[i].meal_num = 0;
 		philos[i].last_eat = -1;
 		philos[i].right_fork_id = i;
@@ -80,7 +80,6 @@ static t_philo	*init_philosophers(t_sim *sim)
 			philos[i].left_fork_id = sim->nb_philo - 1;
 		else
 			philos[i].left_fork_id = -1;
-		philos[i].alive = 1;
 		philos[i].sim = sim;
 		i++;
 	}
@@ -99,13 +98,11 @@ void	init_sim_struct(t_sim *sim, char **argv, int argc)
 		sim->win_cond = -1;
 	sim->time_eaten = 0;
 	sim->endgame = 0;
-	sim->start_sim = 0;
-	sim->go_signal = 0;
+	sim->start_sim = -1;
 	sim->philos = init_philosophers(sim);
 	sim->forks = init_forks(sim);
 	if (!sim->forks || !sim->philos)
 		; // handle this
 	if (init_mutexes(sim) != 0)
 		; // handle this
-	
 }
