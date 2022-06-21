@@ -44,7 +44,7 @@ int	is_dead(long long last_eat, long long tt_die)
 
 /* used to get the current timestamp !!! unit is milliseconds !!! */
 
-long long	get_time_now(void)
+long long	get_time_now(void) // ok
 {
 	struct timeval		timestamp;
 
@@ -68,7 +68,7 @@ int	custom_usleep(long long time, t_sim *sim)
 	{
 		if (get_time_now() - start >= time)
 			return (0);
-		usleep(50);
+		usleep(200);
 	}
 	return (1);
 }

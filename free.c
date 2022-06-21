@@ -14,28 +14,31 @@
 
 /* free all the mutexes when program exit without syscall failure */
 
-static void	rm_mutexes(t_sim *sim)
+void	clean_program(t_sim *sim, int code)
 {
 	int			i;
 	
-	pthread_mutex_destroy(&sim->add_meal_count);
-	pthread_mutex_destroy(&sim->write_msg);
-	i = 0;
-	while (i < sim->nb_philo)
+	if (code != 2)
 	{
-		pthread_mutex_destroy(&sim->forks[i]);
-		i++;
+		pthread_mutex_destroy(&sim->add_meal_count);
+		pthread_mutex_destroy(&sim->write_msg);
+	}	
+	if (sim->forks)
+	{
+		i = 0;
+		while (i < sim->nb_philo)
+		{
+			pthread_mutex_destroy(&sim->forks[i]);
+			i++;
+		}
+		free(sim->forks);
+		sim->forks = NULL;
 	}
-}
-
-int	clean_program(t_sim *sim)
-{
-	rm_mutexes(sim);
-	free(sim->forks);
-	sim->forks = NULL;
-	free(sim->philos);
-	sim->philos = NULL;
+	if (sim->philos)
+	{
+		free(sim->philos);
+		sim->philos = NULL;
+	}
 	free(sim);
 	sim = NULL;
-	return (0);
 }

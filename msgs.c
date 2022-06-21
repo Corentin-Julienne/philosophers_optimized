@@ -14,11 +14,7 @@
 
 int	display_error_msg(const char *err_specific)
 {
-	char		*err_general;
-
-	err_general = "Philosophers : error : ";
-	write(STDERR_FILENO, err_general, ft_strlen(err_general));
-	write(STDERR_FILENO, err_specific, ft_strlen(err_specific));
+	printf("%s", err_specific);
 	return (1);
 }
 

@@ -27,6 +27,12 @@
 # define FORK			4
 # define VICTORY		5
 
+# define MALLOC_ERR		"Philosophers: Error: Unsuccesful memory allocation\n"
+# define ARG_ERR		"Philosophers: Error: Wrong number of arguments\n"
+# define INVAL_ERR		"Philosophers: Error: Invalid argument format\n"
+
+
+
 typedef struct s_sim
 {
 	int					nb_philo;
@@ -59,9 +65,9 @@ int					eat_sleep_think_pattern(t_philo *philo);
 /* check_args.c */
 int					check_args_validity(int argc, char **argv);
 /* free.c */
-int					clean_program(t_sim *sim);
+void				clean_program(t_sim *sim, int code);
 /* init_structs.c */
-void				init_sim_struct(t_sim *sim, char **argv, int argc);
+int					init_sim_struct(t_sim *sim, char **argv, int argc);
 /* msgs.c */
 int					display_error_msg(const char *err_specific);
 int					display_msg(int id, int msg_type, t_sim *sim);

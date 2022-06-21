@@ -76,22 +76,35 @@ static int	init_philos_threads(t_sim *sim)
 		pthread_join(sim->philos[i].thread_id, NULL);
 		i++;
 	}
-	return (clean_program(sim));
+	clean_program(sim, 0);
+	return (0);
+}
+
+static void	leaks_killing(void) // kill after
+{
+	system("leaks philo");
 }
 
 int	main(int argc, char **argv)
 {
 	int			valid;
+	int			struct_status;
 	t_sim		*sim;
 	
+	atexit(leaks_killing);
 	if (argc != 6 && argc != 5)
-		return (display_error_msg("wrong number of arguments\n"));
-	valid = check_args_validity(argc, argv); // yet to test
+		return (display_error_msg(ARG_ERR));
+	valid = check_args_validity(argc, argv);
 	if (valid == 0)
-		return (display_error_msg("invalid argument format\n"));
+		return (display_error_msg(INVAL_ERR));
 	sim = (t_sim *)malloc(sizeof(t_sim));
 	if (!sim)
-		return (display_error_msg("unsuccessful memory allocation\n"));
-	init_sim_struct(sim, argv, argc);
+		return (display_error_msg(MALLOC_ERR));
+	struct_status = init_sim_struct(sim, argv, argc);
+	if (struct_status)
+	{
+		clean_program(sim, struct_status);
+		return (1);
+	}
 	return (init_philos_threads(sim));
 }

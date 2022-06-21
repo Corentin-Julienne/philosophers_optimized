@@ -38,6 +38,7 @@ static pthread_mutex_t	*init_forks(t_sim *sim)
 {
 	pthread_mutex_t		*forks;
 	int					i;
+	int					j;
 
 	forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
 			 * sim->nb_philo);
@@ -48,7 +49,13 @@ static pthread_mutex_t	*init_forks(t_sim *sim)
 	{
 		if (pthread_mutex_init(&forks[i], NULL) != 0)
 		{
-			free(forks); // destroy forks to avoid leaks ?
+			j = 0;
+			while (j < i)
+			{
+				pthread_mutex_destroy(&forks[j]);
+				j++;
+			}
+			free(forks);
 			return (NULL);
 		}
 		i++;
@@ -59,7 +66,7 @@ static pthread_mutex_t	*init_forks(t_sim *sim)
 /* malloc an array of philo structs
 setup this including the fork ids */
 
-static t_philo	*init_philosophers(t_sim *sim)
+static t_philo	*init_philosophers(t_sim *sim) // seems ok
 {
 	t_philo			*philos;
 	int				i;
@@ -86,7 +93,7 @@ static t_philo	*init_philosophers(t_sim *sim)
 	return (philos);
 }
 
-void	init_sim_struct(t_sim *sim, char **argv, int argc)
+int	init_sim_struct(t_sim *sim, char **argv, int argc)
 {
 	sim->nb_philo = (int)calc_res(argv[1]);
 	sim->tt_die = (int)calc_res(argv[2]);
@@ -99,10 +106,15 @@ void	init_sim_struct(t_sim *sim, char **argv, int argc)
 	sim->time_eaten = 0;
 	sim->endgame = 0;
 	sim->start_sim = -1;
+	sim->philos = NULL;
+	sim->forks = NULL;
 	sim->philos = init_philosophers(sim);
+	if (!sim->philos)
+		return (1);
 	sim->forks = init_forks(sim);
-	if (!sim->forks || !sim->philos)
-		; // handle this
+	if (!sim->forks)
+		return (1);
 	if (init_mutexes(sim) != 0)
-		; // handle this
+		return (2);
+	return (0);
 }
