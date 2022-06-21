@@ -40,11 +40,13 @@ typedef struct s_sim
 	int					win_cond;
 	int					time_eaten;
 	int					endgame;
+	int					phi_ready;
 	long long			start_sim;
 	struct s_philo		*philos;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		write_msg;
 	pthread_mutex_t		add_meal_count;
+	pthread_mutex_t		add_ready;
 }						t_sim;
 
 typedef struct s_philo

@@ -18,6 +18,7 @@ static int	init_mutexes(t_sim *sim)
 {
 	pthread_mutex_t		write_msg;
 	pthread_mutex_t		add_meal_count;
+	pthread_mutex_t		add_ready;
 
 	if (pthread_mutex_init(&write_msg, NULL) != 0)
 		return (1);
@@ -26,8 +27,15 @@ static int	init_mutexes(t_sim *sim)
 		pthread_mutex_destroy(&write_msg);
 		return (1);
 	}
+	if (pthread_mutex_init(&add_ready, NULL) != 0)
+	{
+		pthread_mutex_destroy(&write_msg);
+		pthread_mutex_destroy(&add_meal_count);
+		return (1);
+	}
 	sim->write_msg = write_msg;
 	sim->add_meal_count = add_meal_count;
+	sim->add_ready = add_ready;
 	return (0);
 }
 
@@ -106,6 +114,7 @@ int	init_sim_struct(t_sim *sim, char **argv, int argc)
 	sim->time_eaten = 0;
 	sim->endgame = 0;
 	sim->start_sim = -1;
+	sim->phi_ready = 0;
 	sim->philos = NULL;
 	sim->forks = NULL;
 	sim->philos = init_philosophers(sim);

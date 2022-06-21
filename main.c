@@ -68,6 +68,8 @@ static int	init_philos_threads(t_sim *sim)
 			&philo_routine, (void *)&sim->philos[i]);
 		i++;
 	}
+	while (sim->phi_ready < sim->nb_philo)
+		usleep(50);
 	sim->start_sim = get_time_now();
 	wait_for_endgame(sim);
 	i = 0;
