@@ -44,7 +44,7 @@ int	is_dead(long long last_eat, long long tt_die)
 
 /* used to get the current timestamp !!! unit is milliseconds !!! */
 
-long long	get_time_now(void) // ok
+long long	get_time_now(void)
 {
 	struct timeval		timestamp;
 

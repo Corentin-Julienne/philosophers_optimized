@@ -23,7 +23,7 @@ static int	is_pos_number(const char *str)
 	i = 0;
 	while (str && str[i])
 	{
-		if (str[i] < '0'|| str[i] > '9')
+		if (str[i] < '0' || str[i] > '9')
 			error++;
 		i++;
 	}

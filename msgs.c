@@ -21,7 +21,7 @@ int	display_error_msg(const char *err_specific)
 static void	print_msg(int id, int msg_type, t_sim *sim)
 {
 	char			*msg;
-	long long 		time;
+	long long		time;
 
 	if (msg_type == THINKING)
 		msg = "is thinking\n";

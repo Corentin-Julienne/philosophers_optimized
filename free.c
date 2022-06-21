@@ -17,7 +17,7 @@
 void	clean_program(t_sim *sim, int code)
 {
 	int			i;
-	
+
 	if (code != 2)
 	{
 		pthread_mutex_destroy(&sim->add_meal_count);

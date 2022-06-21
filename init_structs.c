@@ -41,7 +41,7 @@ static pthread_mutex_t	*init_forks(t_sim *sim)
 	int					j;
 
 	forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
-			 * sim->nb_philo);
+			* sim->nb_philo);
 	if (!forks)
 		return (NULL);
 	i = 0;
@@ -66,7 +66,7 @@ static pthread_mutex_t	*init_forks(t_sim *sim)
 /* malloc an array of philo structs
 setup this including the fork ids */
 
-static t_philo	*init_philosophers(t_sim *sim) // seems ok
+static t_philo	*init_philosophers(t_sim *sim)
 {
 	t_philo			*philos;
 	int				i;

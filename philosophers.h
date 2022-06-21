@@ -31,8 +31,6 @@
 # define ARG_ERR		"Philosophers: Error: Wrong number of arguments\n"
 # define INVAL_ERR		"Philosophers: Error: Invalid argument format\n"
 
-
-
 typedef struct s_sim
 {
 	int					nb_philo;

@@ -34,7 +34,7 @@ static void	wait_for_endgame(t_sim *sim)
 		while (i < sim->nb_philo)
 		{
 			if (get_time_now() >= sim->philos[i].last_eat + sim->tt_die
-				 && sim->philos[i].last_eat != -1)
+				&& sim->philos[i].last_eat != -1)
 			{
 				philo_died(sim, i);
 				return ;
@@ -65,7 +65,7 @@ static int	init_philos_threads(t_sim *sim)
 	while (i < sim->nb_philo)
 	{
 		pthread_create(&sim->philos[i].thread_id, NULL,
-			 &philo_routine, (void *)&sim->philos[i]);
+			&philo_routine, (void *)&sim->philos[i]);
 		i++;
 	}
 	sim->start_sim = get_time_now();
@@ -80,18 +80,12 @@ static int	init_philos_threads(t_sim *sim)
 	return (0);
 }
 
-static void	leaks_killing(void) // kill after
-{
-	system("leaks philo");
-}
-
 int	main(int argc, char **argv)
 {
 	int			valid;
 	int			struct_status;
 	t_sim		*sim;
-	
-	atexit(leaks_killing);
+
 	if (argc != 6 && argc != 5)
 		return (display_error_msg(ARG_ERR));
 	valid = check_args_validity(argc, argv);
