@@ -75,8 +75,16 @@ static int	eating_process(t_philo *philo)
 	if (custom_usleep(philo->sim->tt_eat, philo->sim) == 1)
 		return (release_fork_case_endsim(philo));
 	philo->meal_num++;
-	pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
-	pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
+	if ((philo->id - 1) % 2 == 0)
+	{
+		pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
+		pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
+	}
+	else
+	{
+		pthread_mutex_unlock(&philo->sim->forks[philo->right_fork_id]);
+		pthread_mutex_unlock(&philo->sim->forks[philo->left_fork_id]);
+	}
 	if (philo->meal_num == philo->sim->win_cond)
 	{
 		pthread_mutex_lock(&philo->sim->add_meal_count);

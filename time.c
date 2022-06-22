@@ -29,7 +29,7 @@ void	anti_deadlock_algo(t_philo *philo)
 			return ;
 		if ((philo->id - 1) % 2 != 0)
 			custom_usleep(philo->sim->tt_eat, philo->sim);
-		if (philo->id - 1 == philo->sim->nb_philo)
+		if ((philo->id - 1) == philo->sim->nb_philo)
 			custom_usleep(philo->sim->tt_eat * 2, philo->sim);
 	}
 }
