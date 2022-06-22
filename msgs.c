@@ -51,7 +51,11 @@ int	display_msg(int id, int msg_type, t_sim *sim)
 	if (stop == 0)
 	{
 		if (msg_type == DEAD || msg_type == VICTORY)
+		{
+			pthread_mutex_lock(&sim->increment);
 			stop++;
+			pthread_mutex_unlock(&sim->increment);
+		}
 		if (msg_type == VICTORY)
 		{
 			pthread_mutex_unlock(&sim->write_msg);

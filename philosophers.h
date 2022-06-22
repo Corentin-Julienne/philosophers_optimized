@@ -46,7 +46,7 @@ typedef struct s_sim
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		write_msg;
 	pthread_mutex_t		add_meal_count;
-	pthread_mutex_t		add_ready;
+	pthread_mutex_t		increment;
 }						t_sim;
 
 typedef struct s_philo

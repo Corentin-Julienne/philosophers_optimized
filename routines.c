@@ -18,9 +18,9 @@ void	*philo_routine(void *arg)
 	int				res_func;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->sim->add_ready);
+	pthread_mutex_lock(&philo->sim->increment);
 	philo->sim->phi_ready++;
-	pthread_mutex_unlock(&philo->sim->add_ready);
+	pthread_mutex_unlock(&philo->sim->increment);
 	while (philo->sim->start_sim == -1)
 		usleep(1);
 	philo->last_eat = get_time_now();

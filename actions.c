@@ -46,10 +46,20 @@ static int	request_forks(t_philo *philo)
 {
 	if (!philo->sim->endgame)
 	{
-		pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
-		display_msg(philo->id, FORK, philo->sim);
-		pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
-		display_msg(philo->id, FORK, philo->sim);
+		if ((philo->id - 1) % 2 == 0)
+		{
+			pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
+			display_msg(philo->id, FORK, philo->sim);
+			pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
+			display_msg(philo->id, FORK, philo->sim);
+		}
+		else
+		{
+			pthread_mutex_lock(&philo->sim->forks[philo->right_fork_id]);
+			display_msg(philo->id, FORK, philo->sim);
+			pthread_mutex_lock(&philo->sim->forks[philo->left_fork_id]);
+			display_msg(philo->id, FORK, philo->sim);
+		}
 	}
 	else
 		return (1);

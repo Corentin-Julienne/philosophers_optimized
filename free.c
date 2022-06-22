@@ -22,7 +22,7 @@ void	clean_program(t_sim *sim, int code)
 	{
 		pthread_mutex_destroy(&sim->add_meal_count);
 		pthread_mutex_destroy(&sim->write_msg);
-		pthread_mutex_destroy(&sim->add_ready);
+		pthread_mutex_destroy(&sim->increment);
 	}	
 	if (sim->forks)
 	{

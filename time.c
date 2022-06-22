@@ -54,7 +54,7 @@ long long	get_time_now(void)
 
 /* accurate usleep function
 features a loop of usleep(50) with verif after each iteration
-interrupts if : 
+interrupts if :
 1) waiting time has reached its end
 2) a philosopher died or the victory condition is achieved
 !!! time in milliseconds !!! */
