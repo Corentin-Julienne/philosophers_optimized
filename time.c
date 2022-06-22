@@ -29,7 +29,7 @@ void	anti_deadlock_algo(t_philo *philo)
 			return ;
 		if ((philo->id - 1) % 2 != 0)
 			custom_usleep(philo->sim->tt_eat, philo->sim);
-		if (philo->id - 1 == philo->sim->nb_philo)
+		if ((philo->id - 1) == philo->sim->nb_philo)
 			custom_usleep(philo->sim->tt_eat * 2, philo->sim);
 	}
 }
@@ -54,7 +54,7 @@ long long	get_time_now(void)
 
 /* accurate usleep function
 features a loop of usleep(50) with verif after each iteration
-interrupts if : 
+interrupts if :
 1) waiting time has reached its end
 2) a philosopher died or the victory condition is achieved
 !!! time in milliseconds !!! */

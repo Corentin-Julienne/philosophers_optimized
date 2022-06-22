@@ -14,13 +14,17 @@
 
 static void	philo_died(t_sim *sim, int i)
 {
+	pthread_mutex_lock(&sim->increment);
 	sim->endgame++;
+	pthread_mutex_unlock(&sim->increment);
 	display_msg(sim->philos[i].id, DEAD, sim);
 }
 
 static void	philos_have_eaten_enough(t_sim *sim)
 {
+	pthread_mutex_lock(&sim->increment);
 	sim->endgame++;
+	pthread_mutex_unlock(&sim->increment);
 	display_msg(1, VICTORY, sim);
 }
 

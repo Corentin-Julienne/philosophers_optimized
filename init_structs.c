@@ -18,7 +18,7 @@ static int	init_mutexes(t_sim *sim)
 {
 	pthread_mutex_t		write_msg;
 	pthread_mutex_t		add_meal_count;
-	pthread_mutex_t		add_ready;
+	pthread_mutex_t		increment;
 
 	if (pthread_mutex_init(&write_msg, NULL) != 0)
 		return (1);
@@ -27,7 +27,7 @@ static int	init_mutexes(t_sim *sim)
 		pthread_mutex_destroy(&write_msg);
 		return (1);
 	}
-	if (pthread_mutex_init(&add_ready, NULL) != 0)
+	if (pthread_mutex_init(&increment, NULL) != 0)
 	{
 		pthread_mutex_destroy(&write_msg);
 		pthread_mutex_destroy(&add_meal_count);
@@ -35,7 +35,7 @@ static int	init_mutexes(t_sim *sim)
 	}
 	sim->write_msg = write_msg;
 	sim->add_meal_count = add_meal_count;
-	sim->add_ready = add_ready;
+	sim->increment = increment;
 	return (0);
 }
 
